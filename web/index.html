@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F4EEE3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16181A" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Cesta · Lista de la compra</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <main>
+      <!-- LISTA -->
+      <section class="view" id="view-list" data-view="list">
+        <header class="top">
+          <div class="top-row">
+            <div>
+              <p class="eyebrow" id="list-eyebrow"></p>
+              <h1 class="title" id="list-title"></h1>
+            </div>
+            <button class="icon-btn" data-action="list-menu" aria-label="Opciones de la lista" data-icon="dots"></button>
+          </div>
+          <div class="chips scroller" id="super-chips" aria-label="Supermercados"></div>
+          <div class="progress" aria-live="polite">
+            <div class="progress-track"><span id="progress-fill"></span></div>
+            <span class="progress-text" id="progress-text"></span>
+          </div>
+        </header>
+
+        <div class="ticket-wrap">
+          <div class="ticket">
+            <div class="ticket-head"><span id="ticket-no"></span><span id="ticket-date"></span></div>
+            <ul class="items" id="items"></ul>
+            <div class="empty" id="list-empty" hidden>
+              <div class="empty-art">🧺</div>
+              <h3>La cesta está vacía</h3>
+              <p>Escribe abajo lo que necesitas.<br>Truco: separa con comas para añadir varios a la vez — <em>2 leche, pan, 1 kg tomates</em>.<br>Añade el precio al final para el coste estimado: <em>aceite 8,95€</em>.</p>
+            </div>
+            <div class="ticket-foot">
+              <div class="leader"><span>Artículos</span><i></i><b id="f-total">0</b></div>
+              <div class="leader"><span>En el carro</span><i></i><b id="f-done">0</b></div>
+              <div class="leader"><span>Pendientes</span><i></i><b id="f-left">0</b></div>
+              <div class="leader total" id="f-est-row" hidden><span>Coste estimado</span><i></i><b id="f-est">0</b></div>
+              <div class="barcode" aria-hidden="true"></div>
+              <p class="ticket-hint">Toca un artículo para tacharlo</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUPERS -->
+      <section class="view" id="view-supers" data-view="supers">
+        <header class="top">
+          <p class="eyebrow">Tus tiendas</p>
+          <h1 class="title">Listas por súper</h1>
+          <p class="hint">Mantén pulsado <span aria-hidden="true">⠿</span> y arrastra para ordenarlos</p>
+        </header>
+        <div class="super-grid" id="super-grid"></div>
+      </section>
+
+      <!-- HISTÓRICO -->
+      <section class="view" id="view-history" data-view="history">
+        <header class="top">
+          <p class="eyebrow">Compras terminadas</p>
+          <h1 class="title">Histórico</h1>
+          <div class="chips scroller" id="history-filters" aria-label="Filtrar por súper"></div>
+        </header>
+        <div class="stats" id="history-stats"></div>
+        <div class="history-tools">
+          <button class="ticket-new" data-action="ticket-new"><span aria-hidden="true">🧾</span><span>Registrar un ticket</span></button>
+        </div>
+        <div class="history-list" id="history-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <form class="composer" id="composer" autocomplete="off">
+    <input id="composer-input" placeholder="Añadir artículo…" aria-label="Nuevo artículo" enterkeyhint="send" maxlength="160" autocomplete="off" autocapitalize="sentences">
+    <button class="add-btn" type="submit"><span data-icon="plus"></span><span>Añadir</span></button>
+  </form>
+
+  <nav class="tabbar" aria-label="Secciones">
+    <div class="tabbar-inner">
+      <button class="tab" data-action="tab" data-tab="list"><span class="tab-icon" data-icon="list"></span><span>Lista</span><span class="tab-badge" id="badge-list"></span></button>
+      <button class="tab" data-action="tab" data-tab="supers"><span class="tab-icon" data-icon="store"></span><span>Supers</span></button>
+      <button class="tab" data-action="tab" data-tab="history"><span class="tab-icon" data-icon="clock"></span><span>Histórico</span></button>
+    </div>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span id="toast-msg"></span>
+    <button id="toast-action" type="button"></button>
+  </div>
+
+  <div class="sheet-backdrop" id="sheet-backdrop">
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <div class="celebrate" id="celebrate" role="dialog" aria-modal="true" aria-labelledby="c-title">
+    <div class="c-card">
+      <div class="stamp">Completada</div>
+      <h2 id="c-title"></h2>
+      <p id="c-sub"></p>
+      <button class="c-ticket" id="c-ticket" type="button"><span aria-hidden="true">📷</span><span><b>Añadir importe y foto del ticket</b><small>Para llevar la cuenta del gasto</small></span></button>
+      <div class="c-actions">
+        <button class="btn ghost" id="c-undo" type="button">Deshacer</button>
+        <button class="btn primary" id="c-ok" type="button">¡Genial!</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Foto del ticket">
+    <img id="viewer-img" alt="Foto del ticket">
+    <button class="viewer-close" data-action="viewer-close" type="button" aria-label="Cerrar">✕</button>
+  </div>
+
+  <input type="file" id="photo-input" accept="image/*" hidden>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>

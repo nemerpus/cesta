@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Ticket con borde troquelado -->
+    <path android:fillColor="#FFFDF8"
+        android:pathData="M38,30 H70 A2,2 0 0 1 72,32 V76 l-4.5,-3 -4.5,3 -4.5,-3 -4.5,3 -4.5,-3 -4.5,3 -4.5,-3 -4.5,3 V32 A2,2 0 0 1 38,30 Z" />
+    <path android:strokeColor="#1E2420" android:strokeWidth="3.4" android:strokeLineCap="round"
+        android:pathData="M42.5,40 H65.5 M42.5,49 H65.5 M42.5,58 H57.5" />
+    <!-- Tachado de rotulador -->
+    <path android:strokeColor="#2F9E62" android:strokeWidth="3" android:strokeLineCap="round"
+        android:pathData="M40.5,49.6 C48,47.2 56,51.6 67.5,48.6" />
+</vector>
